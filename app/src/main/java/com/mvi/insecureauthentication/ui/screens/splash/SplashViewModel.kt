@@ -13,14 +13,14 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(private val getIsSignedIn: GetCurrentUserUseCase) :
+class SplashViewModel @Inject constructor(private val getCurrentUser: GetCurrentUserUseCase) :
     ContainerHost<SplashState, SplashEffect>, ViewModel() {
     override val container: Container<SplashState, SplashEffect> = container(SplashState())
 
-    fun init() =
+    init {
         viewModelScope.launch {
             intent {
-                getIsSignedIn()
+                getCurrentUser()
                     .whenSuccess {
                         postSideEffect(SplashEffect.NavigateToHome)
                     }.whenError {
@@ -28,9 +28,6 @@ class SplashViewModel @Inject constructor(private val getIsSignedIn: GetCurrentU
                     }
             }
         }
-
-    init {
-        init()
     }
 }
 

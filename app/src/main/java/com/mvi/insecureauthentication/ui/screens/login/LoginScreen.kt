@@ -2,6 +2,7 @@ package com.mvi.insecureauthentication.ui.screens.login
 
 import android.content.Context
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -61,16 +63,22 @@ fun LoginScreenContent(
     onLoginClick: () -> Unit,
     onNavigateToRegistrationClick: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = stringResource(id = R.string.login))
-        Spacer(modifier = Modifier.padding(48.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(text = stringResource(id = R.string.login), style = MaterialTheme.typography.h3)
+        Spacer(modifier = Modifier.padding(top = 48.dp))
         TextField(
             value = email,
             onValueChange = onEmailChange,
             label = { Text(stringResource(id = R.string.email)) }
         )
-        Spacer(modifier = Modifier.padding(24.dp))
         TextField(
+            visualTransformation = PasswordVisualTransformation(),
             value = password,
             onValueChange = onPasswordChange,
             label = { Text(stringResource(id = R.string.password)) }

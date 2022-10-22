@@ -1,10 +1,8 @@
 package com.mvi.insecureauthentication.ui.screens.home
 
 import android.content.Context
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -57,9 +55,15 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
 
 @Composable
 fun HomeScreenContent(user: User?, onLogoutClick: () -> Unit) {
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = stringResource(id = R.string.hello))
-        Text(text = user?.name ?: "")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(text = stringResource(id = R.string.hello), style = MaterialTheme.typography.h3)
+        Text(text = user?.name ?: "", style = MaterialTheme.typography.body1)
         Spacer(modifier = Modifier.padding(48.dp))
 
         TextButton(onClick = onLogoutClick) {

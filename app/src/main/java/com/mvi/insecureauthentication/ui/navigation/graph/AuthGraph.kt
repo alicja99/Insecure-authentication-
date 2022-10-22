@@ -17,6 +17,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         }
         composable(Route.AuthNavigation.Register.name) {
             RegisterScreen(navController = navController)
+            BackHandler(enabled = true, onBack = { navController.popBackStack() })
         }
     }
 }

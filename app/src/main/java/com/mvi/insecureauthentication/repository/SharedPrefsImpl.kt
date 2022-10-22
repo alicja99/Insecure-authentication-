@@ -16,7 +16,7 @@ import java.util.*
 import javax.inject.Inject
 
 const val SHARED_PREFS = "SharedPrefs"
-const val DEF_VALUE = "Default"
+const val DEF_VALUE = ""
 
 class SharedPrefsImpl @Inject constructor(
     @ApplicationContext context: Context,
@@ -37,18 +37,22 @@ class SharedPrefsImpl @Inject constructor(
 
     override fun login(email: String, password: String): Result<User> {
         val usersJson = getStringValue(ALL_USERS)
+        if (usersJson.isEmpty()) {
+            return Result.Error(UserNotFoundException)
+        }
         val users = usersAdapter.fromJson(usersJson) ?: emptyList()
 
         val match = users.find { it.email == email && it.password == password }
 
         match?.let {
             return Result.Success(it)
-        } ?: return Result.Error(UserNotFoundException)
+        } ?: return Result.Error(InvalidData)
     }
 
     override fun register(email: String, password: String, name: String): Result<User> {
         val usersJson = getStringValue(ALL_USERS)
-        val users = usersAdapter.fromJson(usersJson)?.toMutableList() ?: mutableListOf()
+        val users = if (usersJson.isEmpty()) mutableListOf() else usersAdapter.fromJson(usersJson)
+            ?.toMutableList() ?: mutableListOf()
 
         val match = users.find { it.email == email && it.password == password }
         if (match !== null) {
@@ -71,10 +75,13 @@ class SharedPrefsImpl @Inject constructor(
 
     override fun getCurrentUser(): Result<User> {
         val userJson = getStringValue(CURRENT_USER)
+        if (userJson.isEmpty()) {
+            return Result.Error(UserNotFoundException)
+        }
         val user = userAdapter.fromJson(userJson)
         user?.let {
             return Result.Success(it)
-        } ?: return Result.Error(InvalidData)
+        } ?: return Result.Error(UserNotFoundException)
     }
 
     override fun logout(): Result<Boolean> {

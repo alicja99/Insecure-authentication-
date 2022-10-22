@@ -1,10 +1,8 @@
 package com.mvi.insecureauthentication.ui.screens.register
 
 import android.content.Context
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
@@ -15,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -29,7 +29,10 @@ private fun handleSideEffect(
     context: Context
 ) {
     when (effect) {
-        is RegisterEffect.RegisterSuccess -> navController.navigate(Route.AuthNavigation.Login.name)
+        is RegisterEffect.RegisterSuccess -> {
+            context.showToast(context.getString(R.string.account_created))
+            navController.navigate(Route.AuthNavigation.Login.name)
+        }
         is RegisterEffect.RegisterError -> context.showToast(context.getString(R.string.general_error))
     }
 }
@@ -70,16 +73,22 @@ fun RegisterScreenContent(
     onNameChange: (String) -> Unit,
     onRegisterClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = stringResource(id = R.string.register))
-        Spacer(modifier = Modifier.padding(48.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(text = stringResource(id = R.string.register), style = MaterialTheme.typography.h3)
+        Spacer(modifier = Modifier.padding(top = 48.dp))
         TextField(
             value = email,
             onValueChange = onEmailChange,
             label = { Text(stringResource(id = R.string.email)) }
         )
-        Spacer(modifier = Modifier.padding(24.dp))
         TextField(
+            visualTransformation = PasswordVisualTransformation(),
             value = password,
             onValueChange = onPasswordChange,
             label = { Text(stringResource(id = R.string.password)) }
@@ -89,7 +98,6 @@ fun RegisterScreenContent(
             onValueChange = onNameChange,
             label = { Text(stringResource(id = R.string.name)) }
         )
-
         TextButton(
             onClick = onRegisterClick,
             enabled = name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()
