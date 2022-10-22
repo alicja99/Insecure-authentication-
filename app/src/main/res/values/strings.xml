@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">InsecureAuthentication</string>
+    <string name="invalid_data">Invalid data</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="login">Login</string>
+    <string name="go_to_registration">Go to registration</string>
+    <string name="register">Register</string>
+    <string name="hello">Hello</string>
+    <string name="logout">Logout</string>
+    <string name="general_error">Something went wrong</string>
+</resources>
